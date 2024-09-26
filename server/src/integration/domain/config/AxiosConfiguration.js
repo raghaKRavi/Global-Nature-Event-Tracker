@@ -1,8 +1,9 @@
 const axios = require('axios');
+require('dotenv').config()
 
-const axiosInstance = ({baseURL, params}) => {
+const axiosInstance = (baseURL) => {
     const instance = axios.create({
-        baseURL,
+        baseURL: baseURL,
         headers:{
             'Content-Type': 'application/json'
         },
@@ -11,8 +12,9 @@ const axiosInstance = ({baseURL, params}) => {
 
     instance.interceptors.request.use(
         (config) => {
-            console.log("Request Config => ", config)
-            config.params = {...config.params, api_key: `${API_TOKEN_NASA}`};
+            
+            config.params = {...config.params, api_key: `${process.env.API_TOKEN_NASA}`};
+            console.log("params ", config.params);
             return config;
         },
         (error) => {
@@ -22,7 +24,7 @@ const axiosInstance = ({baseURL, params}) => {
 
     instance.interceptors.response.use(
         (response) => {
-            console.log("Response => ", response);
+            // console.log("Response => ", response);
             return response;
         },
         (error) => {
@@ -34,4 +36,4 @@ const axiosInstance = ({baseURL, params}) => {
 }
 
 
-export default axiosInstance;
+module.exports = axiosInstance;
