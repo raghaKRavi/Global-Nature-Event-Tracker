@@ -24,7 +24,6 @@ const axiosInstance = (baseURL) => {
 
     instance.interceptors.response.use(
         (response) => {
-            // console.log("Response => ", response);
             return response;
         },
         (error) => {

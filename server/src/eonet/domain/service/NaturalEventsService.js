@@ -15,5 +15,20 @@ class NaturalEventsService {
             return{success: false, error}
         }
     }
+
+    async getEvents(params){
+        try{
+            const response = await this.axios.get('/events', {
+                params: {...params}
+            });
+
+            return {success: true, body: response.data};
+        } catch(error){
+            console.log(error);
+            return{success: false, error}
+        }
+    }
+
+
 }
 module.exports = NaturalEventsService;
