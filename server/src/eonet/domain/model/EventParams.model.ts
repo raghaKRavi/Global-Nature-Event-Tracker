@@ -4,4 +4,4 @@ const eventParams = {
     status: "all"
 }
 
-module.exports = eventParams;
+export default eventParams;

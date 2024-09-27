@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import eonet_routes from './eonet/rest/routes/NaturalEventsRoute';
+
 const app = express()
-const eonet_routes = require('./eonet/rest/routes/NaturalEventsRoute');
 const base_url = '/api/v1';
 
 app.use(express.json())

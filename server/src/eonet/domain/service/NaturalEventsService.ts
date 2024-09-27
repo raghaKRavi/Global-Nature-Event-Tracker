@@ -1,14 +1,15 @@
-const axiosInstance = require('../../../integration/domain/config/AxiosConfiguration');
+import axiosInstance from '../../../integration/domain/config/AxiosConfiguration';
 
 class NaturalEventsService {
-    constructor(baseURL){
+    axios: any;
+    constructor(baseURL: string){
         this.axios = axiosInstance(baseURL);
     }
 
     async getCategories(){
         try{
             const response = await this.axios.get(`/categories`);
-            const categories = response.data.categories && response.data.categories.map(c => ({id: c.id , category: c.title}));
+            const categories = response.data.categories && response.data.categories.map((c: { id: any; title: any; }) => ({id: c.id , category: c.title}));
             return { success: true, body: categories}
         } catch(error){
             console.log(error);
@@ -16,7 +17,7 @@ class NaturalEventsService {
         }
     }
 
-    async getEvents(params){
+    async getEvents(params: any){
         try{
             const response = await this.axios.get('/events', {
                 params: {...params}
@@ -31,4 +32,4 @@ class NaturalEventsService {
 
 
 }
-module.exports = NaturalEventsService;
+export default NaturalEventsService;
