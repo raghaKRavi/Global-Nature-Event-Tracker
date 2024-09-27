@@ -31,7 +31,7 @@ exports.getCategoriesDetail = getCategoriesDetail;
 const getEvents = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         var schema;
-        const params = (0, ParamProcess_helper_1.default)(request.body, EventParams_model_1.default, schema.body);
+        const params = (0, ParamProcess_helper_1.default)(request.body, EventParams_model_1.default);
         const data = yield NaturalEventsServiceInstance.getEvents(params);
         response.json(data);
     }

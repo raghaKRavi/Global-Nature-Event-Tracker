@@ -3,9 +3,10 @@ import { z, ZodError } from "zod";
 
 import { StatusCodes } from "http-status-codes";
 
-export const validateData = (schema: z.ZodObject<any, any>) => {
+export const validateDataMiddleware = (schema: z.ZodObject<any, any>) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log("Inside validation")
       schema.parse(req.body);
       next();
     } catch (error) {
