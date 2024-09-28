@@ -7,7 +7,7 @@ const paramProcess = (body: any, defaults ={}) => {
     const result : { [key: string]: any } = {}
 
     for (const [key, value] of Object.entries(body)) {
-        if(value == null && defaults.hasOwnProperty('key')){
+        if(value == null && defaults.hasOwnProperty(key)){
             result[key as any] = value;
         } else if(value != null){
             result[key as any] = value;

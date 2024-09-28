@@ -1,3 +1,4 @@
+"use strict";
 const Params = {
     limit: 5,
     days: 10,
