@@ -7,4 +7,5 @@ const EventSchema_1 = require("../schemas/EventSchema");
 const eonetRouter = (0, express_1.Router)();
 eonetRouter.get('/categories', NaturalEventsController_1.getCategoriesDetail);
 eonetRouter.get('/events', (0, shared_1.validateDataMiddleware)(EventSchema_1.EventRequestSchema), NaturalEventsController_1.getEvents);
+eonetRouter.get('/sources', NaturalEventsController_1.getSources);
 exports.default = eonetRouter;

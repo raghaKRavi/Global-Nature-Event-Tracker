@@ -21,7 +21,10 @@ class NaturalEventsService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const response = yield this.axios.get(`/categories`);
-                const categories = response.data.categories && response.data.categories.map((c) => ({ id: c.id, category: c.title }));
+                const categories = response.data.categories && response.data.categories.map((category) => {
+                    const { id, title } = category;
+                    return { id, title };
+                });
                 return { success: true, body: categories };
             }
             catch (error) {
@@ -36,7 +39,35 @@ class NaturalEventsService {
                 const response = yield this.axios.get('/events', {
                     params: Object.assign({}, params)
                 });
-                return { success: true, body: response.data };
+                const events = response.data.events && response.data.events.map(
+                //TODO: if possible destructure and return in better format!
+                (event) => {
+                    const { id, title, description, closed, categories, sources, geometry } = event;
+                    return { id,
+                        title,
+                        description,
+                        closed,
+                        categories,
+                        sources,
+                        geometry };
+                });
+                return { success: true, body: events };
+            }
+            catch (error) {
+                console.log(error);
+                return { success: false, error };
+            }
+        });
+    }
+    getSources() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.axios.get('/sources');
+                const sources = response.data.sources && response.data.sources.map((s) => {
+                    const { id, title, source } = s;
+                    return { id, title, source };
+                });
+                return { success: true, body: sources };
             }
             catch (error) {
                 console.log(error);

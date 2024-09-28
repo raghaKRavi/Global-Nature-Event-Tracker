@@ -24,7 +24,17 @@ export const getEvents = async (request: IEventRequestBody, response: Response) 
     }
 }
 
+export const getSources = async (request: Request, response: Response) => {
+    try{
+        const data = await NaturalEventsServiceInstance.getSources();
+        response.json(data);
+    } catch (error){
+        response.status(500).json({ message: 'Error fetching data' });
+    }
+}
+
 export default {
     getCategoriesDetail,
-    getEvents
+    getEvents,
+    getSources
 }
