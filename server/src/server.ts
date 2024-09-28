@@ -9,3 +9,5 @@ app.use(express.json())
 app.use(`${base_url}/eonet`, eonetRouter);
 
 app.listen(8080, () => { console.log("server started on port 8080")});
+
+export default app;
