@@ -6,7 +6,6 @@ const http_status_codes_1 = require("http-status-codes");
 const validateDataMiddleware = (schema) => {
     return (req, res, next) => {
         try {
-            console.log("Inside validation");
             schema.parse(req.body);
             next();
         }

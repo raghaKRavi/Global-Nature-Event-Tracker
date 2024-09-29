@@ -36,6 +36,9 @@ class NaturalEventsService {
     getEvents(params) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                if (params.category != null && Array.isArray(params.category) && params.category.length > 0) {
+                    params.category = params.category.join(',');
+                }
                 const response = yield this.axios.get('/events', {
                     params: Object.assign({}, params)
                 });
@@ -51,7 +54,7 @@ class NaturalEventsService {
                         sources,
                         geometry };
                 });
-                return { success: true, body: events };
+                return { success: true, body: this.segregateOccurrence(events) };
             }
             catch (error) {
                 console.log(error);
@@ -74,6 +77,14 @@ class NaturalEventsService {
                 return { success: false, error };
             }
         });
+    }
+    segregateOccurrence(data) {
+        return data.reduce(function (obj, item) {
+            const key = item.categories.at(0).title;
+            console.log((key in obj));
+            obj[key] = !(key in obj) ? [item] : obj[key].concat(item);
+            return obj;
+        }, {});
     }
 }
 exports.default = NaturalEventsService;

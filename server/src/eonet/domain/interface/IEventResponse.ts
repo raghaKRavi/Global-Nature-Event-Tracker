@@ -1,6 +1,3 @@
-import { ICategoryData } from "./ICategoryData";
-import { ISourceData } from "./ISourceData";
-
 export interface IEventData {
     id: string,
     title: string,
@@ -17,4 +14,15 @@ export interface IGeometryData {
     date: string,
     type: string,
     coordinates: Array<number>
+}
+
+export interface ICategoryData{
+    id: string,
+    title: string
+}
+
+export interface ISourceData {
+    id: string,
+    title: string,
+    source: string
 }

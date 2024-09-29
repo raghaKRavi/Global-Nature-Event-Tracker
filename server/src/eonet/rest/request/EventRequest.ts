@@ -1,8 +1,8 @@
 import {Request} from 'express';
 
-type IEventRequest = {
+export type IEventRequest = {
     source?: string,
-    category?: Array<string>,
+    category?: Array<string> | string,
     status: string, //TODO: change to enum
     limit: number,
     days?: number,
