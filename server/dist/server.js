@@ -10,3 +10,4 @@ const base_url = '/api/v1';
 app.use(express_1.default.json());
 app.use(`${base_url}/eonet`, NaturalEventsRoute_1.default);
 app.listen(8080, () => { console.log("server started on port 8080"); });
+exports.default = app;
