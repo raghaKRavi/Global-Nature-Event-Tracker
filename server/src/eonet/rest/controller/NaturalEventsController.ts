@@ -24,6 +24,15 @@ export const getEvents = async (request: IEventRequestBody, response: Response) 
     }
 }
 
+export const getGeoJsonEvents = async (request: IEventRequestBody, response: Response) => {
+    try{
+        const data = await NaturalEventsServiceInstance.getGeoJsonEvents(request.body);
+        response.json(data);
+    } catch (error){
+        response.status(500).json({ message: 'Error fetching data' });
+    }
+}
+
 export const getSources = async (request: Request, response: Response) => {
     try{
         const data = await NaturalEventsServiceInstance.getSources();
@@ -36,5 +45,6 @@ export const getSources = async (request: Request, response: Response) => {
 export default {
     getCategoriesDetail,
     getEvents,
-    getSources
+    getSources,
+    getGeoJsonEvents
 }
