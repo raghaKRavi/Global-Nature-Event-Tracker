@@ -79,13 +79,52 @@ class NaturalEventsService {
         }
     }
 
-    segregateOccurrence(data: IEventData[]){
-        return data.reduce(function(obj, item) {
+    async getGeoJsonEvents(params: IEventRequest){
+        try{
+            if(params.category != null && Array.isArray(params.category) && params.category.length > 0){
+                params.category =  params.category.join(',');
+            }
+            const response = await this.axios.get('/events/geojson', {
+                params: {...params}
+            });
+
+            const events: IEventData[] = response.data.features && response.data.features.map(
+                //TODO: if possible destructure and return in better format!
+                (event: any) => {
+                    const {
+                        properties, 
+                        geometry,
+                        properties: {categories}
+                    } = event;
+
+                    return {properties,
+                        geometry,
+                    categories};
+                }
+            );
+
+            console.log("Events : ",  events);
+
+            return {success: true, body: this.segregateOccurrence(events)};
+        } catch(error){
+            console.log(error);
+            return{success: false, error};
+        }
+    }
+
+    segregateOccurrence(data: any[]){
+        const segregatedObj = {} as Record<string, Object[]>;
+        // return data.reduce(function(obj, item) {
+        //     const key = item.categories.at(0)!.title;
+        //     obj[key] = !(key in obj) ? [item] : obj[key].concat(item);
+        //     return obj;
+        //   }, {} as Record<string, Object[]>);
+        data.forEach((item: any) => {
+            console.log("inside segregation")
             const key = item.categories.at(0)!.title;
-            console.log((key in obj))
-            obj[key] = !(key in obj) ? [item] : obj[key].concat(item);
-            return obj;
-          }, {} as Record<string, Object[]>);
+            segregatedObj[key] = !(key in segregatedObj) ? [item] : segregatedObj[key].concat(item); 
+        })
+        return segregatedObj;
     }
 }
 export default NaturalEventsService;
