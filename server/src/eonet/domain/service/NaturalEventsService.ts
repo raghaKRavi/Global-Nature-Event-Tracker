@@ -79,7 +79,7 @@ class NaturalEventsService {
         }
     }
 
-    async getGeoJsonEvents(params: IEventRequest){
+    async getGeoJsonEvents(params: any){
         try{
             if(params.category != null && Array.isArray(params.category) && params.category.length > 0){
                 params.category =  params.category.join(',');
@@ -88,24 +88,39 @@ class NaturalEventsService {
                 params: {...params}
             });
 
-            const events: IEventData[] = response.data.features && response.data.features.map(
+            const events: IEventData[] = response.data.features?.map(
                 //TODO: if possible destructure and return in better format!
                 (event: any) => {
                     const {
-                        properties, 
+                        properties: {id}, 
+                        properties: {title}, 
+                        properties: {description}, 
+                        properties: {closed},
+                        properties: {date},
+                        properties: {magnitudeValue},
+                        properties: {magnitudeUnit},
+                        // properties,
                         geometry,
                         properties: {categories}
                     } = event;
 
-                    return {properties,
+                    return {
+                        id, 
+                        title, 
+                        description, 
+                        closed,
+                        date,
+                        magnitudeValue,
+                        magnitudeUnit,
+                        // properties,
                         geometry,
                     categories};
                 }
-            );
+            ) ?? [];
 
             console.log("Events : ",  events);
 
-            return {success: true, body: this.segregateOccurrence(events)};
+            return {success: true, body: events};
         } catch(error){
             console.log(error);
             return{success: false, error};

@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import NaturalEventsService from "../../domain/service/NaturalEventsService";
-import { IEventRequestBody } from '../request/EventRequest';
+import { IEventRequest, IEventRequestBody } from '../request/EventRequest';
 
 require('dotenv').config()
 
@@ -26,7 +26,7 @@ export const getEvents = async (request: IEventRequestBody, response: Response) 
 
 export const getGeoJsonEvents = async (request: IEventRequestBody, response: Response) => {
     try{
-        const data = await NaturalEventsServiceInstance.getGeoJsonEvents(request.body);
+        const data = await NaturalEventsServiceInstance.getGeoJsonEvents(request.query);
         response.json(data);
     } catch (error){
         response.status(500).json({ message: 'Error fetching data' });

@@ -6,8 +6,7 @@ import { StatusCodes } from "http-status-codes";
 export const validateDataMiddleware = (schema: z.ZodObject<any, any>) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log("Inside validation")
-      schema.parse(req.body);
+      schema.parse(req.query);
       next();
     } catch (error) {
       if (error instanceof ZodError) {
