@@ -4,6 +4,7 @@ import LeafletMapIntegration  from './features/map/DeviceMap';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { DataParent } from './features/main/DataParent';
+import LeafletMap from './features/map/LeafletMap';
 
 
 const App = () => {
@@ -16,7 +17,7 @@ const App = () => {
         </div>
 
         <div className="w-full h-full overflow-hidden">
-          <LeafletMapIntegration />
+          <LeafletMap />
         </div>
       </div>
       </Provider>
