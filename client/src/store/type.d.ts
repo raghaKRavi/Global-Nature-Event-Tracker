@@ -37,7 +37,11 @@ export type sources = {
 
 export type geometry = {
     type: string,
-    coordinates: Array<number> | Array<Array<number>>
+    coordinates: Array<number>
+}
+
+export type geoJsonGeometry = geometry & {
+    coordinates: Array<Array<number>>
 }
 
 export type categories = {

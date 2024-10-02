@@ -23,3 +23,10 @@ code {
   z-index: 999 !important;
 }
 
+.event-detail-modal {
+  z-index: 999 !important;
+}
+
+.button-on-map{
+  z-index: 999 !important;
+}
