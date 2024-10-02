@@ -1,6 +1,11 @@
-interface EventResponse {
-    count: number,
-    
+export interface EventResponse {
+    id: string,
+    title: string,
+    description: string | null,
+    closed: string | null,
+    date: string,
+    magnitudeValue: number,
+    magnitudeUnit: string
 }
 
 interface EventData {

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const EventRequestSchema = z.object({
     status: z.enum(["all", "open", "close"]),
-    limit: z.number().optional(),
+    limit: z.string().optional(),
     source: z.string().optional(),
     category: z.array(z.string()).optional(),
     days: z.number().optional(),
