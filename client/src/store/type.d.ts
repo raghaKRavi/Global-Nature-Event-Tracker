@@ -3,6 +3,14 @@ export interface InitialStateProps {
     error: string | null,
     headers: Object
 }
+
+export interface IEonetState {
+    categories: ICategory[],
+    eventsParam: IEventParams,
+    selectedCategories: Array<string>,
+    coordinatesDetails: Record<string, Array<number>>
+}
+
 export interface EonetGeoJsonInitialState {
     success: boolean,
     body: Array<EventGeoJsonBodyStruct>
@@ -14,7 +22,7 @@ export interface ResponseBodyType {
 
 export interface EventGeoJsonBodyStruct extends EventGeoJsonProperties {
     geometry: geometry,
-    categories: categories
+    categories: ICategory
 }
 
 export interface EventGeoJsonProperties {
@@ -22,7 +30,7 @@ export interface EventGeoJsonProperties {
     title: string,
     description: string,
     closed: string,
-    categories: Array<categories>,
+    categories: Array<ICategory>,
     date: string,
     geometryDates: Array<string>,
     magnitudeValue: string,
@@ -44,7 +52,7 @@ export type geoJsonGeometry = geometry & {
     coordinates: Array<Array<number>>
 }
 
-export type categories = {
+export interface ICategory {
     id: string,
     title: string
 }
@@ -59,7 +67,7 @@ export interface EventRequestObject {
     status?: string,
     limit?: number,
     source?: string,
-    category?: Array<string>,
+    category?: string,
     days?: number,
     start?: string,
     end?: string,
@@ -67,4 +75,19 @@ export interface EventRequestObject {
     maximumLong?: number,
     minimumLat?: number,
     maximumLat?: number,
+}
+
+export interface IEventParams {
+    // status?: string,
+    // limit?: string,
+    // source?: string,
+    // category?: string,
+    // days?: string,
+    // start?: string,
+    // end?: string,
+    // minimumLong?: string,
+    // maximumLong?: string,
+    // minimumLat?: string,
+    // maximumLat?: string,
+    [key: string]: string
 }

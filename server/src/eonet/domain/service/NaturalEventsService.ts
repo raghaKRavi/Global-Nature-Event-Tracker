@@ -1,6 +1,6 @@
 import axiosInstance from '../../../integration/domain/config/AxiosConfiguration';
 import { IEventRequest, IEventRequestBody } from '../../rest';
-import { ICategoryData, IEventData, ISourceData } from '../interface/IEventResponse';
+import { ICategoryData, IEventData, IGeometry, ISourceData } from '../interface/IEventResponse';
 
 class NaturalEventsService {
     private axios: any;
@@ -17,6 +17,7 @@ class NaturalEventsService {
                     return {id, title};
                 }
             );
+            console.log("categories ", response)
             return { success: true, body: categories}
         } catch(error){
             console.log(error);
@@ -24,7 +25,7 @@ class NaturalEventsService {
         }
     }
 
-    async getEvents(params: IEventRequest){
+    async getEvents(params: any){
         try{
             if(params.category != null && Array.isArray(params.category) && params.category.length > 0){
                 params.category =  params.category.join(',');
@@ -56,7 +57,7 @@ class NaturalEventsService {
                 }
             );
 
-            return {success: true, body: this.segregateOccurrence(events)};
+            return {success: true, body: events};
         } catch(error){
             console.log(error);
             return{success: false, error};
@@ -99,10 +100,11 @@ class NaturalEventsService {
                         properties: {date},
                         properties: {magnitudeValue},
                         properties: {magnitudeUnit},
-                        // properties,
-                        geometry,
+                        // geometry,
                         properties: {categories}
                     } = event;
+
+                    const geometry = this.flattenedArray(event);
 
                     return {
                         id, 
@@ -117,8 +119,6 @@ class NaturalEventsService {
                     categories};
                 }
             ) ?? [];
-
-            console.log("Events : ",  events);
 
             return {success: true, body: events};
         } catch(error){
@@ -135,11 +135,19 @@ class NaturalEventsService {
         //     return obj;
         //   }, {} as Record<string, Object[]>);
         data.forEach((item: any) => {
-            console.log("inside segregation")
             const key = item.categories.at(0)!.title;
             segregatedObj[key] = !(key in segregatedObj) ? [item] : segregatedObj[key].concat(item); 
         })
         return segregatedObj;
+    }
+
+    flattenedArray(data: Record<string, any>){
+        
+        if("geometry" in data && typeof data.geometry["coordinates"][0] !== 'number'){
+            data.geometry["coordinates"] = data.geometry["coordinates"][0];
+            return data.geometry;
+        }
+        return data.geometry;
     }
 }
 export default NaturalEventsService;

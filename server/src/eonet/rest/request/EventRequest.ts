@@ -2,7 +2,7 @@ import {Request} from 'express';
 
 export type IEventRequest = {
     source?: string,
-    category?: Array<string> | string,
+    category?: string,
     status: string, //TODO: change to enum
     limit: number,
     days?: number,

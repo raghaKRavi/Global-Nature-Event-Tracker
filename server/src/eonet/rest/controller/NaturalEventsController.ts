@@ -17,7 +17,7 @@ export const getCategoriesDetail = async (request: Request, response: Response) 
 
 export const getEvents = async (request: IEventRequestBody, response: Response) => {
     try{
-        const data = await NaturalEventsServiceInstance.getEvents(request.body);
+        const data = await NaturalEventsServiceInstance.getEvents(request.query);
         response.json(data);
     } catch (error){
         response.status(500).json({ message: 'Error fetching data' });

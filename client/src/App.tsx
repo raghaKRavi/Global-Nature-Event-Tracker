@@ -1,25 +1,41 @@
 import React from 'react';
 import './App.css';
-import LeafletMapIntegration  from './features/map/DeviceMap';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
-import { DataParent } from './features/main/DataParent';
+import { HomeContent } from './features/main/HomeContent';
 import LeafletMap from './features/map/LeafletMap';
+import { Box, Grid2 } from '@mui/material';
 
 
 const App = () => {
   return(
     <>
     <Provider store = {store}>
-      <div className="grid grid-cols-1 md:grid-cols-[45%,55%] h-screen">
-        <div className="p-4 bg-gray-100">
-          <DataParent />
+      {/* <Box sx={{ width: '100%', height: '100vh' }} className="">
+        <div className="">
+          <HomeContent />
         </div>
 
-        <div className="w-full h-full overflow-hidden">
+        <div className="">
           <LeafletMap />
         </div>
-      </div>
+      </Box> */}
+
+      <Box sx={{ width: '100%' }}>
+      <Grid2 container rowSpacing={1} columnSpacing={1}>
+        <Grid2
+        sx={{
+          display: { xs: "none", md: "block" }
+        }}
+        size={{xs: 0, sm: 0, md: 5}}>
+          <HomeContent />
+        </Grid2>
+
+        <Grid2 size={{xs: 12, sm: 12, md: 7}}>
+        <LeafletMap />
+        </Grid2>
+      </Grid2>
+    </Box>
       </Provider>
     </>
   );
