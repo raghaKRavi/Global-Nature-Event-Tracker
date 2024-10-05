@@ -1,6 +1,6 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -18,6 +18,9 @@ code {
   isolation: isolate;
   z-index: 1;
 }
+/* .leaflet-control { z-index: 0 !important}
+.leaflet-pane { z-index: 0 !important}
+.leaflet-top, .leaflet-bottom {z-index: 0 !important} */
 
 .event-modal{
   z-index: 999 !important;

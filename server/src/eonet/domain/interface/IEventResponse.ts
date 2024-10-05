@@ -16,6 +16,11 @@ export interface IGeometryData {
     coordinates: Array<number>
 }
 
+export interface IGeometry {
+    type: string,
+    coordinates: Array<Array<Array<string>>> | Array<Array<string>>
+}
+
 export interface ICategoryData{
     id: string,
     title: string
