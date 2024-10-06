@@ -16,7 +16,7 @@ import {
 export default function LineChartVisual() {
   const data = useSelector((state: RootState) => state.eonet.magnitudeData);
   return (
-    <ResponsiveContainer>
+    <ResponsiveContainer width='100%'>
       <LineChart
         width={500}
         height={300}
@@ -41,7 +41,7 @@ export default function LineChartVisual() {
           stroke="#8884d8"
           activeDot={{ r: 8 }}
         />
-        <Brush />
+        <Brush height={25}/>
       </LineChart>
     </ResponsiveContainer>
   );

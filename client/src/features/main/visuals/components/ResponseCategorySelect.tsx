@@ -22,14 +22,25 @@ export default function ResponseCategoriesSelect(){
       }, [defaultResponseCat])
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <InputLabel id="category-select-small-label">Category</InputLabel>
+    <FormControl size="small">
+      <InputLabel id="category-select-small-label" 
+      sx={{
+          fontSize: '14px', 
+        }}
+        >Category</InputLabel>
       <Select
         labelId="category-select-small-label"
         id="category-select-small"
         label="category"
         onChange={handleChange}
         value={initialValue}
+        sx={{
+          height: 40,
+          '.MuiSelect-select': {
+            padding: '10px 14px',
+            fontSize: '14px', // Font size for the selected text
+          },
+        }}
       >
         {defaultResponseCat.map(rc => (
              <MenuItem value={rc}>{rc}</MenuItem>

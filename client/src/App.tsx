@@ -11,17 +11,7 @@ const App = () => {
   return(
     <>
     <Provider store = {store}>
-      {/* <Box sx={{ width: '100%', height: '100vh' }} className="">
-        <div className="">
-          <HomeContent />
-        </div>
-
-        <div className="">
-          <LeafletMap />
-        </div>
-      </Box> */}
-
-      <Box sx={{ width: '100%' }}>
+      {/* <Box sx={{ width: '100%' }}>
       <Grid2 container rowSpacing={1} columnSpacing={1}>
         <Grid2
         sx={{
@@ -35,7 +25,10 @@ const App = () => {
         <LeafletMap />
         </Grid2>
       </Grid2>
-    </Box>
+    </Box> */}
+      <Box sx={{ width: '100vw'}}>
+      <LeafletMap />
+      </Box>
       </Provider>
     </>
   );

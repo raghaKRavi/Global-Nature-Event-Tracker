@@ -29,6 +29,7 @@ export default function StatusSelectDropdown(){
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
       <InputLabel id="status-select-small-label">Status</InputLabel>
       <Select
+        size="small"
         labelId="status-select-small-label"
         id="status-select-small"
         value={defaultStatus.status}

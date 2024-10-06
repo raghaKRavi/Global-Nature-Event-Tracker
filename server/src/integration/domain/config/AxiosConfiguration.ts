@@ -6,14 +6,12 @@ const axiosInstance = (baseURL: string) => {
         baseURL: baseURL,
         headers:{
             'Content-Type': 'application/json'
-        },
-        timeout: 5000
+        }
     });
 
     instance.interceptors.request.use(
         (config) => {
             config.params = {...config.params, api_key: `${process.env.API_TOKEN_NASA}`};
-            console.log("params ", config.params);
             return config;
         },
         (error: any) => {

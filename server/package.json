@@ -5,11 +5,9 @@
   "main": "./src/server.js",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/server.js",
+    "start": "node dist/server.js",
     "tsc": "tsc",
-    "test": "jest",
-    "postinstall": "npm run tsc",
-    "dev": "tsc-watch --project . --outDir ./dist --onSuccess \"nodemon ./dist/server.js\""
+    "test": "jest"
   },
   "keywords": [],
   "author": "",

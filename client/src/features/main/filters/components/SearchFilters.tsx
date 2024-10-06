@@ -4,8 +4,9 @@ import { fetchGeoJsonEvents } from "../../../../store/actions/Eonet.action";
 import { AppDispatch, RootState } from "../../../../store/store";
 import StatusSelectDropdown from "./multiselect/StatusSelectDropdown";
 import CategoryDropDown from "./multiselect/CategoryDropdown";
-import { Button } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import { updateEventParam } from "../../../../store/slice/Eonet.slice";
+import Fingerprint from '@mui/icons-material/Fingerprint';
 
 const people = [
     { id: 1, name: 'Durward Reynolds' },
@@ -32,16 +33,23 @@ export const SearchFilters = () => {
     }, [dispatch, params, selectedCategories])
 
     const handleSearch = () => {
-        console.log("rendered from search");
         dispatch(fetchGeoJsonEvents(params));
     }
 
     return(
-        <>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center'
+        }}>
         <StatusSelectDropdown />
         <CategoryDropDown />
-        <Button variant="outlined" onClick={handleSearch}>search</Button>
-        </>
+        {/* <IconButton aria-label="fingerprint" color="secondary">
+        <Fingerprint />
+        </IconButton> */}
+        <Button variant="outlined" size="small" onClick={handleSearch}>search</Button>
+        </Box>
     );
 
 }

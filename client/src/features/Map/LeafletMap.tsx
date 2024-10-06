@@ -3,10 +3,13 @@ import L, { LatLngExpression, GeoJSON as LeafletGeoJSON, Point } from "leaflet";
 import { MapContainer, Marker, TileLayer, GeoJSON } from "react-leaflet";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { IVisuals } from "../../store/type";
 import { Feature, FeatureCollection } from "geojson";
 import { FlyToLocation } from "../../components/FlyToLocation";
+import BarChartVisual from "../main/visuals/components/BarChartVisual";
+import { HomeContent } from "../main/HomeContent";
+import { SearchFilters } from "../main/filters/components/SearchFilters";
 
 const defaultCenter = [53.35014, -6.266155];
 const defaultZoom = 11;
@@ -175,6 +178,82 @@ const LeafletMap = () => {
         <NextTo goToNextPosition={flyToNextFeature} />
 
         {/* <EventModal show={showPopup} setShow={setShowPopup} /> */}
+
+        {/* <Box className="visualization-container-main" sx={{ 
+          bgcolor:  'white',
+          // width: '70%', 
+          width: {
+            xs: '95%',
+            sm: '95%',
+            md: '95%',
+            lg: '80%',
+            xl: '60%',
+          },
+    
+          height: {
+            xs: '35%',
+            sm: '35%',
+            md: '35%',
+            lg: '40%',
+            xl: '35%',
+          }, 
+          position: "fixed",
+          bottom: 0,
+          right: {
+            xs: '50%',
+            sm: '50%',
+            md: '50%',
+            lg: 0,
+            xl: 0,
+          },
+          transform: {
+            xs: 'translateX(50%)',
+            sm: 'translateX(50%)',
+            md: 'translateX(50%)',
+            lg: 'none',
+            xl: 'none',
+          },
+          borderTopLeftRadius: 16,
+          borderTopRightRadius: {
+            xs: 16,
+            sm: 16,
+            md: 16,
+            lg: 0,
+            xl: 0,
+          },
+          }}>
+          <HomeContent />
+        </Box> */}
+
+        <Box className="container-main" sx={{
+          height: '90%',
+          width: {
+            xs: '0%',
+            sm: '0%',
+            md: '0%',
+            lg: '30%',
+            xl: '20%',
+          },
+          position: 'fixed',
+          top: '5%',
+          left: '5%',
+          padding: '7px 5px'
+        }}>
+          <Box className = "search-container" sx={{
+            bgcolor: 'white', 
+            margin: 'auto', 
+            p: '3px 4px', 
+            borderRadius: 2, 
+            flexShrink: 0, 
+            // height: '8%'
+            }}>
+            <SearchFilters />
+          </Box>
+          
+          <Box className="visual-container" sx={{bgcolor: 'white', height: '100%', mt: 2, borderRadius: 2, p: '2px 10px', maxHeight: '89%'}}>
+            <HomeContent />
+          </Box>
+        </Box>
       </MapContainer>
     </>
   );
