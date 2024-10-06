@@ -1,5 +1,6 @@
 import * as awsx from "@pulumi/awsx";
 import * as pulumi from "@pulumi/pulumi";
+import * as docker from "@pulumi/docker";
 
 const env = pulumi.getStack();
 
@@ -20,15 +21,8 @@ const ecrRepository = new awsx.ecr.Repository(`${env}-ecr-repo`, {
     },
 });
 
-const image = new awsx.ecr.Image("nasa-web-app", {
-    repositoryUrl: ecrRepository.url,
-    context: "./",
-    dockerfile: "../server/Dockerfile"
-})
-
 export const outputs = {
     ecrName: ecrRepository.repository.name,
     ecrUrl: ecrRepository.url,
     ecrArn: ecrRepository.repository.arn,
-    image: image.imageUri
 };

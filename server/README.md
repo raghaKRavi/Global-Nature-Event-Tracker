@@ -1,4 +1,4 @@
-# Global Nature Event Tracker - React Frontend App
+# Global Nature Event Tracker - Express NodeJs/Typescript Backend
 
 This is a React application built using TypeScript. Follow the steps below to run the app locally after cloning the repository from GitHub.
 
@@ -30,7 +30,7 @@ git clone https://github.com/raghaKRavi/Global-Nature-Event-Tracker.git
 ### 2. Navigate into the project directory
 
 ```bash
-cd /client 
+cd /server 
 ```
 
 ### 3. Install Dependencies
@@ -39,14 +39,23 @@ Install the required dependencies using npm (or yarn):
 npm install
 ```
 
-### 4. Start the Application
+### 4. Compiling TypeScript Code
+Since the app is written in TypeScript, you will need to compile it before running it. TypeScript files are typically compiled into JavaScript using the tsc (TypeScript compiler).
+
+Run the following command to compile the TypeScript files:
+```bash
+npm run build
+```
+
+### 5. Start the Application
 To start the app in development mode, use the following command:
 ```bash
 npm run start
 ```
 
-### 5. Building the App for Production
-If you want to build the app for production:
+### 6. Running Tests (Optional)
+If you have tests set up, you can run them with:
 ```bash
-npm run build
+npm test
 ```
+

@@ -27,7 +27,6 @@ class NaturalEventsService {
           const { id, title } = category;
           return { id, title };
         });
-      console.log("categories ", response);
       return { success: true, body: categories };
     } catch (error) {
       console.log(error);
@@ -113,7 +112,6 @@ class NaturalEventsService {
 
       const events: IEventData[] =
         response.data.features?.map(
-          //TODO: if possible destructure and return in better format!
           (event: any) => {
             const {
               properties: { id },
@@ -126,8 +124,6 @@ class NaturalEventsService {
               geometry,
               properties: { categories },
             } = event;
-
-            // const geometry = this.flattenedArray(event);
 
             return {
               id,
@@ -182,9 +178,7 @@ class NaturalEventsService {
         const existingItem = count.find((item) => item.category === c.title);
 
         if (existingItem) {
-          // Update the count if category exists
           existingItem.count++;
-        //   existingItem.id.push(item.id);
           existingItem.metadata.push({
             id: item.id,
             mValue: item.magnitudeValue,
@@ -213,33 +207,6 @@ class NaturalEventsService {
     });
 
     return count;
-  }
-
-  segregateOccurrence(data: any[]) {
-    const segregatedObj = {} as Record<string, Object[]>;
-    // return data.reduce(function(obj, item) {
-    //     const key = item.categories.at(0)!.title;
-    //     obj[key] = !(key in obj) ? [item] : obj[key].concat(item);
-    //     return obj;
-    //   }, {} as Record<string, Object[]>);
-    data.forEach((item: any) => {
-      const key = item.categories.at(0)!.title;
-      segregatedObj[key] = !(key in segregatedObj)
-        ? [item]
-        : segregatedObj[key].concat(item);
-    });
-    return segregatedObj;
-  }
-
-  flattenedArray(data: Record<string, any>) {
-    if (
-      "geometry" in data &&
-      typeof data.geometry["coordinates"][0] !== "number"
-    ) {
-      data.geometry["coordinates"] = data.geometry["coordinates"][0];
-      return data.geometry;
-    }
-    return data.geometry;
   }
 }
 export default NaturalEventsService;

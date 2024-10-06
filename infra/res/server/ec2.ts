@@ -63,7 +63,8 @@ export const ec2Instance = new aws.ec2.Instance(
         sudo amazon-linux-extras install docker -y
         sudo service docker start
         sudo usermod -a -G docker ec2-user
-        docker run -d -p 80:80 <your-docker-image>`,
+        aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 495521027359.dkr.ecr.eu-west-1.amazonaws.com
+        docker run -d -p 8080:8080 495521027359.dkr.ecr.eu-west-1.amazonaws.com/prod-ecr-repo`,
     },
 );
 

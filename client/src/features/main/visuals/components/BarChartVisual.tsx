@@ -19,17 +19,11 @@ export default function BarChartVisual(){
     const barChartData = useSelector((state: RootState)=> state.eonet.visuals);
 
     return (
-        <ResponsiveContainer width="100%">
+        <ResponsiveContainer width='100%'>
         <BarChart
-            width={500}
-            height={300}
+            // width={500}
+            // height={300}
             data={barChartData.length > 0 ? barChartData : []}
-            margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-            }}
         >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="category" />

@@ -40,7 +40,6 @@ const CategoryDropDown = () => {
     }, [open]);
 
     const handleChange = (value: any) => {
-        console.log(value);
         dispatch(updateCategoriesArray(value.map((c: ICategory) => c.id)));
     }
 
@@ -60,7 +59,7 @@ const CategoryDropDown = () => {
                 <TextField {...params} label="Category" sx={{fontSize: '10px'}}/>
             )}
             size="small"
-            sx={{ width: '200px' }}
+            sx={{ width: '150px' }}
         />
         </>
     );

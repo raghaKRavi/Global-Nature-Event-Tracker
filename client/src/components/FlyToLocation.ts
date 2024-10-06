@@ -4,8 +4,6 @@ import { useMap } from "react-leaflet";
 
 export const FlyToLocation = ({ position }: any) => {
     const map = useMap();
-
-    // console.log("position -. ", position);
   
     useEffect(() => {
       if (position) {
