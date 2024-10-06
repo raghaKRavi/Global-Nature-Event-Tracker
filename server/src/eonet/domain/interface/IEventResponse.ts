@@ -3,6 +3,8 @@ export interface IEventData {
     title: string,
     description: string,
     closed: string,
+    magnitudeValue: number,
+    magnitudeUnit: string,
     categories: Array<ICategoryData>,
     sources: Array<ISourceData>,
     geometry: Array<IGeometryData>

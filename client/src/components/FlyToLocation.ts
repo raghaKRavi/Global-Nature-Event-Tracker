@@ -1,13 +1,19 @@
+import L from "leaflet";
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 
 export const FlyToLocation = ({ position }: any) => {
-    const map = useMap(); 
+    const map = useMap();
+
+    // console.log("position -. ", position);
   
     useEffect(() => {
       if (position) {
         
-        map.flyTo(position, 10, {
+        map.flyTo(L.latLng(
+            parseFloat(position[1]),
+            parseFloat(position[0])
+        ), 10, {
           duration: 2,
         });
       }

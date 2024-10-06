@@ -8,7 +8,24 @@ export interface IEonetState {
     categories: ICategory[],
     eventsParam: IEventParams,
     selectedCategories: Array<string>,
-    coordinatesDetails: Record<string, Array<number>>
+    coordinatesDetails: any[],
+    visuals: IVisuals[],
+    responseCategories: Array<string>,
+    magnitudeData: Array<MetaData>
+}
+
+export interface IVisuals {
+    count: number,
+    category: string,
+    metadata: MetaData[]
+}
+
+export type MetaData = {
+    id: string,
+    mValue: number,
+    mUnit: string,
+    date: string,
+    goejson: {}
 }
 
 export interface EonetGeoJsonInitialState {

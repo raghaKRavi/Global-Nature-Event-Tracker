@@ -9,8 +9,7 @@ export const fetchCategories = createAsyncThunk(
     async(_, thunkAPI) => {
         try{
             console.log('inside here')
-            const res = await axiosInstance.get(`${BASE}/categories`,);
-            console.log(res.data);
+            const res = await axiosInstance.get(`${BASE}/categories`);
             return res;
         } catch(error) {
             return thunkAPI.rejectWithValue("Failed to fetch the categories");
@@ -23,8 +22,6 @@ export const fetchGeoJsonEvents = createAsyncThunk(
     async(queryParamObj: EventRequestObject, thunkAPI) => {
         try{
             const res: any = await axiosInstance.get(`${BASE}/geojson`, {params: queryParamObj});
-            console.log(queryParamObj);
-            console.log(res.data.body.map((event: any) => (event.geometry)))
             return res;
         } catch(error) {
             return thunkAPI.rejectWithValue("Failed to fetch the events");
