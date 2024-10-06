@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { EonetGeoJsonInitialState, EventGeoJsonBodyStruct, ICategory, IEonetState, IEventParams, InitialStateProps } from "../type"
+import { EonetGeoJsonInitialState, EventGeoJsonBodyStruct, ICategory, IEonetState, IEventParams, InitialStateProps, IVisuals } from "../type"
 import { fetchCategories, fetchGeoJsonEvents } from "../actions/Eonet.action"
 
 
@@ -12,10 +12,13 @@ const initialState: EonetGeoJsonInitialState & InitialStateProps & IEonetState= 
     categories: [] as ICategory[],
     eventsParam: {
         status: "all",
-        limit: '2'
+        limit: '20'
     } as IEventParams,
     selectedCategories: [],
-    coordinatesDetails: {}
+    coordinatesDetails: [],
+    visuals: [] as IVisuals[],
+    responseCategories: [],
+    magnitudeData: []
 }
 
 const EonetSlice = createSlice({
@@ -28,16 +31,12 @@ const EonetSlice = createSlice({
         },
         updateCategoriesArray: (state, action: PayloadAction<string[]>) => {
             const value = action.payload;
-            // console.log(value);
-            // const index = state.selectedCategories.indexOf(value);
-            // console.log(index);
-            // if(index > -1){
-            //     console.log(value, index);
-            //     state.selectedCategories.splice(index, 1);
-            // } else {
-            //     state.selectedCategories.concat(value);
-            // }
             state.selectedCategories = value
+        },
+        updateMagnitudeData: (state, action: PayloadAction<string>) => {
+            state.visuals.length > 0 && state.visuals.filter(v => v.category === action.payload).flatMap((item) => (
+                state.magnitudeData = item.metadata
+            ))
         }
     },
     extraReducers: (builder) => {
@@ -52,7 +51,10 @@ const EonetSlice = createSlice({
                 state.success = action.payload.data.success;
                 state.body = action.payload.data.body;
                 state.headers = action.payload.headers;
-                state.coordinatesDetails = splitCategories(action.payload.data.body)
+                state.visuals = action.payload.data.visuals;
+                state.responseCategories = getResponseCategories(action.payload.data?.visuals);
+                state.magnitudeData = action.payload.data?.visuals.at(0).metadata
+                state.coordinatesDetails = combineCoordinates(action.payload.data?.body);
             })
             .addCase(fetchGeoJsonEvents.rejected, (state, action) =>{
                 state.isLoading = false;
@@ -78,26 +80,52 @@ const EonetSlice = createSlice({
     }
 });
 
-const splitCategories = (data: EventGeoJsonBodyStruct[]): Record<string, Array<number>> => {
-    var res : Record<string, Array<number>> = {};
+// const splitCategories = (data: EventGeoJsonBodyStruct[]): Record<string, Array<number>> => {
+//     var res : Record<string, Array<number>> = {};
 
-    data.map((event: any) => {
-        const coordinates = event.geometry.coordinates;
-        var id = event.id;
-        if(Array.isArray(coordinates[0])){
-          coordinates.map((coords: Array<number>) => {
-            const newId = `${id} + - + ${coordinates[1]} + ${coordinates[1]}`;
-            res[newId] = coords;
-          })
+//     data.map((event: any) => {
+//         const coordinates = event.geometry.coordinates;
+//         var id = event.id;
+//         if(Array.isArray(coordinates[0])){
+//           coordinates.map((coords: Array<number>) => {
+//             const newId = `${id} - ${coordinates[1]}${coordinates[0]}`;
+//             res[newId] = coords;
+//           })
           
-        } else {
-          res[id] = coordinates;
-        }
-      })
+//         } else {
+//           res[id] = coordinates;
+//         }
+//       })
 
+//     return res;
+// }
+
+const combineCoordinates = (data: EventGeoJsonBodyStruct[]) => {
+    const resCoordinates = [] as any[];
+    data.map((event: any) => {
+        const coordinates = event?.geometry?.coordinates;
+        if(Array.isArray(coordinates[0])){
+
+          for(var i =0; i<coordinates?.length; i++){
+            resCoordinates.push(coordinates[i]);
+          }
+
+        } else{
+          resCoordinates.push(coordinates);
+        }
+    });
+
+        return resCoordinates;
+}
+
+const getResponseCategories = (data: IVisuals[]): Array<string> => {
+    const res: string[] = [];
+    data?.map((i)=> (
+        res.push(i?.category)
+    ));
     return res;
 }
 
-export const { updateCategoriesArray, updateEventParam } = EonetSlice.actions;
+export const { updateCategoriesArray, updateEventParam, updateMagnitudeData } = EonetSlice.actions;
 
 export default EonetSlice.reducer;

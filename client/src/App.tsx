@@ -25,7 +25,7 @@ const App = () => {
       <Grid2 container rowSpacing={1} columnSpacing={1}>
         <Grid2
         sx={{
-          display: { xs: "none", md: "block" }
+          display: { xs: "none", md: "flex" }
         }}
         size={{xs: 0, sm: 0, md: 5}}>
           <HomeContent />

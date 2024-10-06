@@ -1,72 +1,24 @@
-import { Key, useEffect, useState } from "react";
-import L, { LatLng, LatLngExpression, LatLngTuple } from "leaflet";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { useEffect, useRef, useState } from "react";
+import L, { LatLngExpression, GeoJSON as LeafletGeoJSON, Point } from "leaflet";
+import { MapContainer, Marker, TileLayer, GeoJSON } from "react-leaflet";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { FlyToLocation } from "../../components/FlyToLocation";
-import { getCustomIcons } from "./components/CustomIcons";
 import { Button } from "@mui/material";
+import { IVisuals } from "../../store/type";
+import { Feature, FeatureCollection } from "geojson";
+import { FlyToLocation } from "../../components/FlyToLocation";
 
-const defaultCenter = [-30.96424514150837, 27.5390625];
-const defaultZoom = 15;
+const defaultCenter = [53.35014, -6.266155];
+const defaultZoom = 11;
 
 type TCoordinateMarker = {
   data: any;
   setShowPopup?: (show: boolean) => void;
-}
-
-const PointMarker = ({ data, setShowPopup }: any) => {
-  return data.map((event: any) => {
-    if (Array.isArray(event.geometry) && event.geometry["coordinates"]?.length < 0) {
-      return undefined;
-    }
-
-    const firstIndex = event.geometry["coordinates"][0];
-
-    // Check if the first coordinate is a string
-    if (typeof firstIndex === "number") {
-      console.log(event.geometry["coordinates"])
-      return (
-        <Marker
-          key={event.id + event.date}
-          position={event.geometry["coordinates"]}
-          icon={getCustomIcons(event.categories.map((c: any) => c.id))}
-          eventHandlers={{
-            click: (e) => {
-              setShowPopup(true);
-              console.log("marker clicked", e);
-            },
-          }}
-        ></Marker>
-      );
-    } else {
-      event.geometry["coordinates"].map((cr: L.LatLngTuple, index: Key | null | undefined) => {
-        console.log(cr[0], " - ", cr[1]);
-
-        return (<Marker
-          key={index}
-          position={cr}
-          icon={getCustomIcons(event.categories.map((c: any) => c.id))}
-          eventHandlers={{
-            click: (e) => {
-              setShowPopup(true);
-              console.log("marker clicked", e);
-            },
-          }}
-        ></Marker>);
-      }
-      );
-    }
-  });
 };
 
-const CoordinateMarker = ({data, setShowPopup}: TCoordinateMarker) => {
-  console.log("Coordinate came in => ", data);
-  return (<Marker 
-    key={data[0] + data[1]}
-    position={[data[1], data[0]]}
-  />);
-}
+const CoordinateMarker = ({ data, setShowPopup }: TCoordinateMarker) => {
+  return <Marker key={data[0] + data[1]} position={[data[1], data[0]]} />;
+};
 
 const TileLayerContainer = () => {
   return (
@@ -93,58 +45,134 @@ const NextTo = ({ goToNextPosition }: any) => {
 
 const LeafletMap = () => {
   const events = useSelector((state: RootState) => state.eonet.body);
+  const data = useSelector((state: RootState) => state.eonet.visuals);
+  const combinedCoordinates = useSelector(
+    (state: RootState) => state.eonet.coordinatesDetails
+  );
   const [position, setPosition] = useState(defaultCenter);
-  const [index, setIndex] = useState<number>(-1);
+  const [currentFeatureIndex, setCurrentFeatureIndex] = useState(0);
   const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [geoJsonObj, setGeoJsonObj] = useState<FeatureCollection>({
+    type: "FeatureCollection",
+    features: [],
+  });
 
-  const coordinatesState = useSelector((state: RootState) => state.eonet.coordinatesDetails);
-
-  console.log(coordinatesState);
+  const mapRef = useRef<any>(null);
+  const geoJsonRef = useRef<LeafletGeoJSON>(null);
 
   useEffect(() => {
-    if (events !== undefined) {
-      setIndex(0);
-    }
-  }, [events]);
+    const features = [] as Feature[];
+    data?.length > 0 &&
+      data?.map((item: IVisuals) =>
+        item.metadata.map((ele: any) =>
+          features.push({
+            type: "Feature",
+            geometry: ele?.geojson,
+            properties: {
+              name: ele.id,
+            },
+          })
+        )
+      );
 
-  const goToNextPosition = () => {
-    setIndex((prevIndex) => (prevIndex + 1) % events?.length);
+    setGeoJsonObj({
+      ...geoJsonObj,
+      features: features,
+    });
+
+    if (geoJsonRef.current) {
+      geoJsonRef.current.clearLayers();
+      geoJsonRef.current.addData(geoJsonObj); // might need to be geojson.features
+    }
+
+  }, [data]);
+
+  useEffect(() => {
+    if (geoJsonRef.current && mapRef.current) {
+      const map = mapRef.current; // Access the map instance
+  
+      let hasLayer = false; // Track if any layers are found
+  
+      geoJsonRef?.current?.eachLayer((layer) => {
+        hasLayer = true; // Found at least one layer
+  
+        if (layer instanceof L.Polygon || layer instanceof L.Polyline || layer instanceof L.GeoJSON) {
+          const bounds = layer.getBounds();
+          map.flyToBounds(bounds, { animate: true });
+        } else if (layer instanceof L.Marker) {
+          const latLng = layer.getLatLng();
+          map.flyTo(latLng, map.getZoom(), { animate: true });
+        }
+      });
+  
+      if (!hasLayer) {
+        console.warn("No layers found in geoJsonRef");
+      }
+    }
+  }, [geoJsonRef, mapRef, geoJsonObj]);
+
+
+  const flyToNextFeature = () => {
+    if (geoJsonRef.current && mapRef.current) {
+      const map = mapRef.current;
+      let featureIndex = 0;
+
+      geoJsonRef.current.eachLayer((layer) => {
+        if (featureIndex === currentFeatureIndex) {
+          if (
+            layer instanceof L.Polygon ||
+            layer instanceof L.Polyline ||
+            layer instanceof L.GeoJSON
+          ) {
+            const bounds = layer.getBounds();
+            map.flyToBounds(bounds, map.getZoom(), { animate: true });
+          } else if (layer instanceof L.Marker) {
+            const latLng = layer.getLatLng();
+            map.flyTo(latLng, map.getZoom(), { animate: true });
+          }
+        }
+        featureIndex += 1;
+      });
+      setCurrentFeatureIndex(
+        (currentFeatureIndex + 1) % geoJsonObj.features.length
+      );
+    }
   };
 
-  useEffect(() => {
-    if (index >= 0) {
-      setPosition(events[index]?.geometry["coordinates"]);
-    }
-  }, [index, events]);
+  // const MapFlyTo = ({geJsonRef, map, hasLayer} : any) => {
+  //   geoJsonRef?.current?.eachLayer((layer) => {
+  //     hasLayer = true; // Found at least one layer
+
+  //     if (layer instanceof L.Polygon || layer instanceof L.Polyline || layer instanceof L.GeoJSON) {
+  //       const bounds = layer.getBounds();
+  //       map.flyToBounds(bounds, { animate: true });
+  //     } else if (layer instanceof L.Marker) {
+  //       const latLng = layer.getLatLng();
+  //       map.flyTo(latLng, map.getZoom(), { animate: true });
+  //     }
+  //   });
+  // }
 
   return (
     <>
       <MapContainer
+        ref={mapRef}
         center={position as LatLngExpression}
         zoom={defaultZoom}
         scrollWheelZoom={true}
         style={{ height: "100vh", width: "100wh" }}
       >
         <TileLayerContainer />
-        
-        {events.map((event: any) => {
-          const coordinates = event.geometry.coordinates;
-          if(Array.isArray(coordinates[0])){
-            coordinates.map((coords: Array<number>) => {
-              console.log("coords that pass in => ", coords);
-              return <CoordinateMarker data={coords} />
-            })
-            
-          } else {
-            return <CoordinateMarker data={coordinates}/>
-          }
-        })}
 
-        {/* {Object.keys(coordinatesState).length > 0 && <CoordinateMarker data={Object.values(coordinatesState)}/>} */}
+        {data.length > 0 && (
+          <GeoJSON
+            key={JSON.stringify(geoJsonObj)}
+            ref={geoJsonRef}
+            data={geoJsonObj}
+          />
+        )}
 
-        {/* <PointMarker data={events} setShowPopup={setShowPopup} /> */}
-        <FlyToLocation position={position} />
-        {events.length > 0 && <NextTo goToNextPosition={goToNextPosition} />}
+        <NextTo goToNextPosition={flyToNextFeature} />
 
         {/* <EventModal show={showPopup} setShow={setShowPopup} /> */}
       </MapContainer>
