@@ -1,0 +1,4 @@
+config:
+  aws:region: us-east-1
+  server:amiName: "amzn2-ami-hvm-*-x86_64-gp2"
+  server:instanceType: "t3.micro"
