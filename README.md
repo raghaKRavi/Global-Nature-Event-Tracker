@@ -2,6 +2,10 @@
 
 This project consists of a **frontend** built with **React** and **TypeScript** that interacts with NASA's EONET (Earth Observatory Natural Event Tracker) API to display natural events like wildfires, storms, and volcanic activity. The **backend** is developed using **Express** and **Node.js** (also in **TypeScript**), serving as an API gateway for handling requests, fetching data from the NASA EONET API, and managing user-specific features.
 
+### Web Application URL
+- Application URL: http://prod-static-site-bucket.s3-website-eu-west-1.amazonaws.com/
+- Swagger URL: http://ec2-3-255-39-100.eu-west-1.compute.amazonaws.com:8080/api-docs/
+
 ### AWS Cloud and Infrastructure
 
 The entire application is hosted on **AWS Cloud** using modern cloud services such as **EC2**, **ECR**, and **S3**. **Pulumi**, an Infrastructure as Code (IaC) tool, is used to define, deploy, and manage the cloud infrastructure. This allows the automated and consistent provisioning of resources such as compute, storage, and networking components, ensuring a seamless and scalable deployment pipeline.
